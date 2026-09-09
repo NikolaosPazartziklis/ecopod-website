@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoPod One</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Model Viewer für 3D .glb Dateien -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        body {
+            background-color: #EBEBEB;
+            color: #111111;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 70vh;
+            --poster-color: transparent;
+        }
+
+        @media (min-width: 768px) {
+            model-viewer {
+                height: 80vh;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-6 md:p-12 selection:bg-neutral-300">
+
+<!-- Minimalistische Navigation (Top) -->
+<header class="grid grid-cols-2 md:grid-cols-4 text-xs tracking-tight text-neutral-500 gap-6">
+    <div>
+        <p class="font-semibold text-neutral-900 mb-2">Products</p>
+        <ul class="space-y-1">
+            <li><a href="#" class="text-neutral-900 font-medium">EcoPod One</a></li>
+            <li><a href="#ecosystem" class="hover:text-neutral-900 transition">EcoDock</a></li>
+            <li><a href="#ecosystem" class="hover:text-neutral-900 transition">Ecosystem</a></li>
+        </ul>
+    </div>
+
+    <div>
+        <p class="font-semibold text-neutral-900 mb-2">Company</p>
+        <ul class="space-y-1">
+            <li><a href="#" class="hover:text-neutral-900 transition">About</a></li>
+            <li><a href="#" class="hover:text-neutral-900 transition">Sustainability</a></li>
+            <li><a href="#" class="hover:text-neutral-900 transition">Privacy</a></li>
+        </ul>
+    </div>
+
+    <div class="hidden md:block">
+        <p class="font-semibold text-neutral-900 mb-2">Resources</p>
+        <ul class="space-y-1">
+            <li><a href="#" class="hover:text-neutral-900 transition">Support</a></li>
+            <li><a href="#" class="hover:text-neutral-900 transition">Media Kit</a></li>
+        </ul>
+    </div>
+
+    <!-- Minimalistisches Newsletter Input oben rechts -->
+    <div class="col-span-2 md:col-span-1 flex flex-col justify-between">
+        <div>
+            <form onsubmit="event.preventDefault(); alert('Vielen Dank für deine Anmeldung!');" class="relative flex items-center">
+                <input type="email" required placeholder="Newsletter" class="w-full bg-neutral-200/70 border-none rounded-full py-2.5 px-4 text-xs text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400">
+                <button type="submit" class="absolute right-1 bg-neutral-300 hover:bg-neutral-400 text-neutral-800 rounded-full w-7 h-7 flex items-center justify-center transition">
+                    &rarr;
+                </button>
+            </form>
+            <p class="text-[10px] text-neutral-400 mt-2 leading-tight">
+                By signing up, I agree with the data protection policy of EcoPod.
+            </p>
+        </div>
+    </div>
+</header>
+
+<!-- Hero / Hauptbereich mit 3D Modell -->
+<main class="relative my-auto py-12 md:py-20">
+    <div class="grid md:grid-cols-12 items-center gap-8">
+
+        <!-- Linker Text: Groß & Clean -->
+        <div class="md:col-span-5 z-10 space-y-6">
+            <h1 class="text-5xl md:text-7xl font-normal tracking-tight text-neutral-950 leading-[1.05]">
+                Introducing <br>
+                <span class="font-medium">the EcoPod.</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-neutral-500 font-normal max-w-sm leading-relaxed">
+                The first pod designed for a fully sustainable ecosystem.
+            </p>
+
+            <div class="pt-4">
+                <a href="#buy" class="text-blue-600 hover:text-blue-700 font-normal text-lg tracking-tight inline-flex items-center gap-1 transition">
+                    Available now <span class="text-xs">&rarr;</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Rechtes 3D Modell -->
+        <div class="md:col-span-7 relative flex items-center justify-center">
+            <model-viewer
+                    id="ecopod-viewer"
+                    src="assets/ecopod3.glb"
+                    alt="EcoPod 3D"
+                    auto-rotate
+                    camera-controls
+                    disable-zoom
+                    shadow-intensity="0.8"
+                    shadow-softness="1"
+                    exposure="1.1"
+                    touch-action="pan-y">
+            </model-viewer>
+        </div>
+
+    </div>
+</main>
+
+<!-- KAUF-BEREICH (INTERAKTIVER KONFIGURATOR) -->
+<section id="buy" class="py-24 border-t border-neutral-300/60 max-w-5xl mx-auto w-full">
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+
+        <!-- Linke Seite: Produkt-Details -->
+        <div>
+            <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold">Order EcoPod One</span>
+            <h2 class="text-4xl font-medium tracking-tight text-neutral-950 mt-2">
+                Select your style.
+            </h2>
+            <p class="text-neutral-500 mt-4 leading-relaxed text-sm">
+                Includes the EcoPod One, a USB-C charging cable, and a 100% plastic-free packaging setup. Free shipping included.
+            </p>
+
+            <!-- Feature Liste -->
+            <ul class="mt-8 space-y-3 text-xs text-neutral-600 border-t border-neutral-300/40 pt-6">
+                <li class="flex items-center gap-2">
+                    <span class="text-neutral-900 font-bold">✓</span> 100% Circular & Recyclable Material
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="text-neutral-900 font-bold">✓</span> 2-Year Limited Warranty
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="text-neutral-900 font-bold">✓</span> Ships in 24–48 Hours
+                </li>
+            </ul>
+        </div>
+
+        <!-- Rechte Seite: Interaktiver Konfigurator -->
+        <div class="bg-neutral-200/50 p-8 rounded-3xl space-y-6">
+            <div>
+                <label class="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-3">Color</label>
+                <div class="flex gap-4 items-center">
+                    <!-- Color Buttons mit data-color Attribut -->
+                    <button class="color-btn w-8 h-8 rounded-full bg-zinc-900 ring-2 ring-offset-2 ring-neutral-900 focus:outline-none transition-all" data-color="#18181b" title="Matte Black"></button>
+                    <button class="color-btn w-8 h-8 rounded-full bg-neutral-400 focus:outline-none transition-all" data-color="#a3a3a3" title="Silver"></button>
+                    <button class="color-btn w-8 h-8 rounded-full bg-emerald-800 focus:outline-none transition-all" data-color="#065f46" title="Eco Green"></button>
+                </div>
+            </div>
+
+            <!-- Preisanzeige -->
+            <div class="pt-4 border-t border-neutral-300/60 flex justify-between items-end">
+                <div>
+                    <span class="text-xs text-neutral-500 block">Total Price</span>
+                    <span class="text-3xl font-medium text-neutral-950">€49</span>
+                </div>
+                <span class="text-xs text-neutral-400">VAT & Free Shipping included</span>
+            </div>
+
+            <!-- Buy Button -->
+            <button id="checkout-button" class="w-full bg-neutral-950 hover:bg-neutral-800 text-white font-normal py-4 rounded-full text-sm transition shadow-sm cursor-pointer">
+                Buy EcoPod One
+            </button>
+        </div>
+
+    </div>
+</section>
+
+<!-- Minimaler Footer -->
+<footer class="flex justify-between items-center text-xs text-neutral-400 pt-6 border-t border-neutral-300/40">
+    <p>&copy; 2026 EcoPod Inc.</p>
+    <p>Designed with precision.</p>
+</footer>
+
+<!-- INTERAKTIVE JAVASCRIPT-LOGIK -->
+<script>
+    const modelViewer = document.getElementById("ecopod-viewer");
+    const colorButtons = document.querySelectorAll(".color-btn");
+
+    // Dynamic 3D Color Switcher
+    colorButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            colorButtons.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'ring-neutral-900'));
+            button.classList.add('ring-2', 'ring-offset-2', 'ring-neutral-900');
+
+            const hexColor = button.getAttribute('data-color');
+
+            if (modelViewer.model && modelViewer.model.materials.length > 0) {
+                const material = modelViewer.model.materials[0];
+                const rgb = hexToRgbRatio(hexColor);
+                material.pbrMetallicRoughness.setBaseColorFactor([rgb.r, rgb.g, rgb.b, 1.0]);
+            }
+        });
+    });
+
+    // Hex zu RGB Umrechnung
+    function hexToRgbRatio(hex) {
+        let c = hex.replace('#', '');
+        if (c.length === 3) c = c.split('').map(x => x + x).join('');
+        const num = parseInt(c, 16);
+        return {
+            r: ((num >> 16) & 255) / 255,
+            g: ((num >> 8) & 255) / 255,
+            b: (num & 255) / 255
+        };
+    }
+
+    // Stripe Checkout Weiterleitung
+    document.getElementById('checkout-button').addEventListener('click', function () {
+        const stripePaymentLink = "https://buy.stripe.com/dein_link_hier";
+
+        if (stripePaymentLink.includes("dein_link_hier")) {
+            alert("Erfolg! Der Button ist einsatzbereit. Ersetze 'https://buy.stripe.com/dein_link_hier' im Code einfach durch deinen echten Stripe-Link.");
+        } else {
+            window.location.href = stripePaymentLink;
+        }
+    });
+</script>
+
+</body>
+</html>
