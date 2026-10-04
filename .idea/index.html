@@ -1,231 +1,565 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoPod One</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoPod One</title>
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Model Viewer für 3D .glb Dateien -->
-    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+  <!-- Google Model Viewer -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
-    <style>
-        body {
-            background-color: #EBEBEB;
-            color: #111111;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            scroll-behavior: smooth;
-        }
+  <!-- GSAP Engine + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-        model-viewer {
-            width: 100%;
-            height: 70vh;
-            --poster-color: transparent;
-        }
+  <style>
+    body {
+      background-color: #EBEBEB;
+      color: #FFFFFF;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow-x: hidden;
+    }
 
-        @media (min-width: 768px) {
-            model-viewer {
-                height: 80vh;
-            }
-        }
-    </style>
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+      background: transparent;
+    }
+
+    .viewport-section {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .smooth-transform {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between p-6 md:p-12 selection:bg-neutral-300">
+<body class="selection:bg-neutral-300">
 
-<!-- Minimalistische Navigation (Top) -->
-<header class="grid grid-cols-2 md:grid-cols-4 text-xs tracking-tight text-neutral-500 gap-6">
+<!-- Header / Navigation -->
+<header class="fixed top-0 left-0 right-0 z-50 p-6 md:p-12 bg-gradient-to-b from-[#EBEBEB] to-transparent pointer-events-none">
+  <div class="grid grid-cols-2 md:grid-cols-4 text-xs tracking-tight text-neutral-500 gap-6 pointer-events-auto">
     <div>
-        <p class="font-semibold text-neutral-900 mb-2">Products</p>
-        <ul class="space-y-1">
-            <li><a href="#" class="text-neutral-900 font-medium">EcoPod One</a></li>
-            <li><a href="#ecosystem" class="hover:text-neutral-900 transition">EcoDock</a></li>
-            <li><a href="#ecosystem" class="hover:text-neutral-900 transition">Ecosystem</a></li>
-        </ul>
+      <p class="font-semibold text-neutral-900 mb-2">Products</p>
+      <ul class="space-y-1">
+        <li><a href="#" class="text-neutral-900 font-medium">EcoPod One</a></li>
+        <li><a href="#buy" class="hover:text-neutral-900 transition">EcoDock</a></li>
+        <li><a href="#ecosystem" class="hover:text-neutral-900 transition">Ecosystem</a></li>
+      </ul>
     </div>
 
     <div>
-        <p class="font-semibold text-neutral-900 mb-2">Company</p>
-        <ul class="space-y-1">
-            <li><a href="#" class="hover:text-neutral-900 transition">About</a></li>
-            <li><a href="#" class="hover:text-neutral-900 transition">Sustainability</a></li>
-            <li><a href="#" class="hover:text-neutral-900 transition">Privacy</a></li>
-        </ul>
+      <p class="font-semibold text-neutral-900 mb-2">Company</p>
+      <ul class="space-y-1">
+        <li><a href="#" class="hover:text-neutral-900 transition">About</a></li>
+        <li><a href="#" class="hover:text-neutral-900 transition">Sustainability</a></li>
+        <li><a href="#" class="hover:text-neutral-900 transition">Privacy</a></li>
+      </ul>
     </div>
 
     <div class="hidden md:block">
-        <p class="font-semibold text-neutral-900 mb-2">Resources</p>
-        <ul class="space-y-1">
-            <li><a href="#" class="hover:text-neutral-900 transition">Support</a></li>
-            <li><a href="#" class="hover:text-neutral-900 transition">Media Kit</a></li>
-        </ul>
+      <p class="font-semibold text-neutral-900 mb-2">Resources</p>
+      <ul class="space-y-1">
+        <li><a href="#" class="hover:text-neutral-900 transition">Support</a></li>
+        <li><a href="#" class="hover:text-neutral-900 transition">Media Kit</a></li>
+      </ul>
     </div>
 
-    <!-- Minimalistisches Newsletter Input oben rechts -->
     <div class="col-span-2 md:col-span-1 flex flex-col justify-between">
-        <div>
-            <form onsubmit="event.preventDefault(); alert('Vielen Dank für deine Anmeldung!');" class="relative flex items-center">
-                <input type="email" required placeholder="Newsletter" class="w-full bg-neutral-200/70 border-none rounded-full py-2.5 px-4 text-xs text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400">
-                <button type="submit" class="absolute right-1 bg-neutral-300 hover:bg-neutral-400 text-neutral-800 rounded-full w-7 h-7 flex items-center justify-center transition">
-                    &rarr;
-                </button>
-            </form>
-            <p class="text-[10px] text-neutral-400 mt-2 leading-tight">
-                By signing up, I agree with the data protection policy of EcoPod.
-            </p>
-        </div>
+      <form onsubmit="event.preventDefault();" class="relative flex items-center">
+        <input type="email" required placeholder="Newsletter" class="w-full bg-neutral-200/70 border-none rounded-full py-2.5 px-4 text-xs text-neutral-900 placeholder-neutral-500 focus:outline-none focus:ring-1 focus:ring-neutral-400">
+        <button type="submit" class="absolute right-1 bg-neutral-300 hover:bg-neutral-400 text-neutral-800 rounded-full w-7 h-7 flex items-center justify-center transition">
+          &rarr;
+        </button>
+      </form>
     </div>
+  </div>
 </header>
 
-<!-- Hero / Hauptbereich mit 3D Modell -->
-<main class="relative my-auto py-12 md:py-20">
-    <div class="grid md:grid-cols-12 items-center gap-8">
+<!-- Haupt-Scrollbereich -->
+<div id="scroll-wrapper" class="relative max-w-7xl mx-auto px-6 md:px-12">
 
-        <!-- Linker Text: Groß & Clean -->
-        <div class="md:col-span-5 z-10 space-y-6">
-            <h1 class="text-5xl md:text-7xl font-normal tracking-tight text-neutral-950 leading-[1.05]">
-                Introducing <br>
-                <span class="font-medium">the EcoPod.</span>
-            </h1>
+  <!-- HERO & KONFIGURATOR BEREICH (PINNING CONTAINER FÜR DAS 3D-MODELL) -->
+  <div id="hero-config-wrapper" class="relative">
 
-            <p class="text-lg md:text-xl text-neutral-500 font-normal max-w-sm leading-relaxed">
-                The first pod designed for a fully sustainable ecosystem.
-            </p>
-
-            <div class="pt-4">
-                <a href="#buy" class="text-blue-600 hover:text-blue-700 font-normal text-lg tracking-tight inline-flex items-center gap-1 transition">
-                    Available now <span class="text-xs">&rarr;</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Rechtes 3D Modell -->
-        <div class="md:col-span-7 relative flex items-center justify-center">
-            <model-viewer
-                    id="ecopod-viewer"
-                    src="assets/ecopod3.glb"
-                    alt="EcoPod 3D"
-                    auto-rotate
-                    camera-controls
-                    disable-zoom
-                    shadow-intensity="0.8"
-                    shadow-softness="1"
-                    exposure="1.1"
-                    touch-action="pan-y">
-            </model-viewer>
-        </div>
-
+    <!-- 3D-MODEL VIEWER -->
+    <div id="model-container" class="absolute top-0 left-0 w-full h-screen pointer-events-none z-20 flex items-center">
+      <div id="model-box" class="w-full md:w-1/2 h-[70vh] md:h-[75vh] flex items-center justify-center smooth-transform">
+        <model-viewer
+                id="ecopod-viewer"
+                src="../assets/ecopod3.glb"
+                alt="EcoPod 3D"
+                bounds="tight"
+                camera-target="auto"
+                environment-image="neutral"
+                exposure="1"
+                shadow-intensity="0"
+                touch-action="none"
+                auto-rotate
+                rotation-per-second="7deg"
+                camera-orbit="35deg 35deg 105%"
+                orientation="0deg 0deg 0deg">
+        </model-viewer>
+      </div>
     </div>
-</main>
 
-<!-- KAUF-BEREICH (INTERAKTIVER KONFIGURATOR) -->
-<section id="buy" class="py-24 border-t border-neutral-300/60 max-w-5xl mx-auto w-full">
-    <div class="grid md:grid-cols-2 gap-12 items-start">
+    <!-- SEKTION 1: HERO -->
+    <section class="viewport-section pt-20">
+      <div id="hero-text" class="w-full md:w-1/2 space-y-6 z-10">
+        <h1 class="text-5xl md:text-7xl font-normal tracking-tight text-neutral-950 leading-[1.05]">
+          Introducing <br>
+          <span class="font-medium">the EcoPod.</span>
+        </h1>
 
-        <!-- Linke Seite: Produkt-Details -->
+        <p class="text-lg md:text-xl text-neutral-500 font-normal max-w-sm leading-relaxed">
+          The first pod designed for a fully sustainable ecosystem.
+        </p>
+
+        <div class="pt-4">
+          <a href="#buy" class="text-blue-600 hover:text-blue-700 font-normal text-lg tracking-tight inline-flex items-center gap-1 transition">
+            Available now <span class="text-xs">&rarr;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SEKTION 2: KONFIGURATOR -->
+    <section id="buy" class="viewport-section flex justify-end">
+      <div id="configurator-box" class="w-full md:w-1/2 space-y-8 z-30 pt-12">
+
         <div>
-            <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold">Order EcoPod One</span>
-            <h2 class="text-4xl font-medium tracking-tight text-neutral-950 mt-2">
-                Select your style.
-            </h2>
-            <p class="text-neutral-500 mt-4 leading-relaxed text-sm">
-                Includes the EcoPod One, a USB-C charging cable, and a 100% plastic-free packaging setup. Free shipping included.
+          <span class="text-xs uppercase tracking-widest text-neutral-400 font-semibold">Order EcoPod One</span>
+          <h2 class="text-4xl font-medium tracking-tight text-neutral-950 mt-2">
+            Deinen EcoPod anpassen.
+          </h2>
+          <p class="text-neutral-500 mt-4 leading-relaxed text-sm">
+            Includes the EcoPod One, a USB-C charging cable, and a 100% plastic-free packaging setup. Free shipping included.
+          </p>
+
+          <ul class="mt-8 space-y-3 text-xs text-neutral-600 border-t border-neutral-300/40 pt-6">
+            <li class="flex items-center gap-2">
+              <span class="text-neutral-900 font-bold">✓</span> 100% Circular & Recyclable Material
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-neutral-900 font-bold">✓</span> 2-Year Limited Warranty
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="text-neutral-900 font-bold">✓</span> Ships in 24–48 Hours
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-3">Glass Tint</label>
+          <div class="flex gap-4 items-center">
+            <!-- 1. Blau (Standard aktiv) -->
+            <button class="color-btn w-8 h-8 rounded-full ring-2 ring-offset-2 ring-neutral-900 focus:outline-none transition-all cursor-pointer" data-color="#005ca8" title="Blue" style="background:#005ca8"></button>
+            <!-- 2. Orange -->
+            <button class="color-btn w-8 h-8 rounded-full focus:outline-none transition-all cursor-pointer" data-color="#ff7a00" title="Orange" style="background:#ff7a00"></button>
+            <!-- 3. Türkis -->
+            <button class="color-btn w-8 h-8 rounded-full focus:outline-none transition-all cursor-pointer" data-color="#00c4b4" title="Turquoise" style="background:#00c4b4"></button>
+            <!-- 4. Rot -->
+            <button class="color-btn w-8 h-8 rounded-full focus:outline-none transition-all cursor-pointer" data-color="#e63946" title="Red" style="background:#e63946"></button>
+            <!-- 5. Grün -->
+            <button class="color-btn w-8 h-8 rounded-full focus:outline-none transition-all cursor-pointer" data-color="#2a9d8f" title="Green" style="background:#2a9d8f"></button>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-neutral-300/60 flex justify-between items-end">
+          <div>
+            <span class="text-xs text-neutral-500 block">Total Price</span>
+            <span class="text-3xl font-medium text-neutral-950">€49</span>
+          </div>
+          <span class="text-xs text-neutral-400">VAT & Free Shipping included</span>
+        </div>
+
+        <button id="checkout-button" class="w-full bg-neutral-950 hover:bg-neutral-800 text-white font-normal py-4 rounded-full text-sm transition shadow-sm cursor-pointer">
+          Buy EcoPod One
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- SEKTION 3: ECOSYSTEM APP (BENTO-GRID / CLEAN MOCKUP) -->
+  <section id="ecosystem" class="py-24 md:py-32 z-30 relative border-t border-neutral-300/40">
+    <div>
+      <!-- Header / Einleitung -->
+      <div class="max-w-xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-blue-600 font-semibold">EcoPod Ecosystem</span>
+        <h3 class="text-4xl font-medium tracking-tight text-neutral-950 mt-2">
+          Deine Hardware. <br>Perfekt synchronisiert.
+        </h3>
+        <p class="text-neutral-500 text-sm mt-4 leading-relaxed">
+          Mit der EcoPod App wird dein Smartphone zur Schaltzentrale. Passe Farbtöne dynamisch an, überwache den Energieverbrauch und steuere Modi in Echtzeit.
+        </p>
+      </div>
+
+      <!-- Bento-Grid Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+
+        <!-- Linke Spalte: Feature-Karten -->
+        <div class="space-y-6 order-2 md:order-1">
+          <div class="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/60 shadow-sm transition hover:bg-white/80">
+            <h4 class="text-neutral-900 font-medium text-base mb-1">Echtzeit-Synchronisierung</h4>
+            <p class="text-neutral-500 text-xs leading-relaxed">
+              Jede Farbänderung in der App überträgt sich ohne wahrnehmbare Verzögerung direkt auf das Glas deines EcoPods.
             </p>
+          </div>
 
-            <!-- Feature Liste -->
-            <ul class="mt-8 space-y-3 text-xs text-neutral-600 border-t border-neutral-300/40 pt-6">
-                <li class="flex items-center gap-2">
-                    <span class="text-neutral-900 font-bold">✓</span> 100% Circular & Recyclable Material
-                </li>
-                <li class="flex items-center gap-2">
-                    <span class="text-neutral-900 font-bold">✓</span> 2-Year Limited Warranty
-                </li>
-                <li class="flex items-center gap-2">
-                    <span class="text-neutral-900 font-bold">✓</span> Ships in 24–48 Hours
-                </li>
-            </ul>
+          <div class="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/60 shadow-sm transition hover:bg-white/80">
+            <h4 class="text-neutral-900 font-medium text-base mb-1">Smarte Automationen</h4>
+            <p class="text-neutral-500 text-xs leading-relaxed">
+              Erstelle individuelle Zeitpläne für Licht, Tönung und Standby-Modi basierend auf deinem Tagesablauf.
+            </p>
+          </div>
         </div>
 
-        <!-- Rechte Seite: Interaktiver Konfigurator -->
-        <div class="bg-neutral-200/50 p-8 rounded-3xl space-y-6">
-            <div>
-                <label class="text-xs font-semibold text-neutral-500 uppercase tracking-wider block mb-3">Color</label>
-                <div class="flex gap-4 items-center">
-                    <!-- Color Buttons mit data-color Attribut -->
-                    <button class="color-btn w-8 h-8 rounded-full bg-zinc-900 ring-2 ring-offset-2 ring-neutral-900 focus:outline-none transition-all" data-color="#18181b" title="Matte Black"></button>
-                    <button class="color-btn w-8 h-8 rounded-full bg-neutral-400 focus:outline-none transition-all" data-color="#a3a3a3" title="Silver"></button>
-                    <button class="color-btn w-8 h-8 rounded-full bg-emerald-800 focus:outline-none transition-all" data-color="#065f46" title="Eco Green"></button>
-                </div>
+        <!-- Mittlere Spalte: Smartphone Mockup ohne extra Scheibe/Hintergrund -->
+        <div class="flex justify-center items-center order-1 md:order-2 my-8 md:my-0">
+          <div class="relative w-[280px] select-none drop-shadow-2xl">
+            <!-- 1. EBENE: App Screenshot -->
+            <div class="absolute inset-[3.5%] top-[2.5%] bottom-[2.5%] rounded-[36px] overflow-hidden z-10 bg-black">
+              <img src="../assets/app.png" alt="EcoPod App Control Center" class="w-full h-full object-cover">
             </div>
-
-            <!-- Preisanzeige -->
-            <div class="pt-4 border-t border-neutral-300/60 flex justify-between items-end">
-                <div>
-                    <span class="text-xs text-neutral-500 block">Total Price</span>
-                    <span class="text-3xl font-medium text-neutral-950">€49</span>
-                </div>
-                <span class="text-xs text-neutral-400">VAT & Free Shipping included</span>
-            </div>
-
-            <!-- Buy Button -->
-            <button id="checkout-button" class="w-full bg-neutral-950 hover:bg-neutral-800 text-white font-normal py-4 rounded-full text-sm transition shadow-sm cursor-pointer">
-                Buy EcoPod One
-            </button>
+            <!-- 2. EBENE: iPhone Rahmen -->
+            <img src="../assets/iphone-frame.png" alt="iPhone Frame" class="relative w-full h-auto object-contain z-20 pointer-events-none">
+          </div>
         </div>
 
+        <!-- Rechte Spalte: Feature-Karten -->
+        <div class="space-y-6 order-3">
+          <div class="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/60 shadow-sm transition hover:bg-white/80">
+            <h4 class="text-neutral-900 font-medium text-base mb-1">Akkustand & Effizienz</h4>
+            <p class="text-neutral-500 text-xs leading-relaxed">
+              Detaillierte Einsichten in die verbleibende Laufzeit, den Ladezyklus und intelligente Energiespar-Tipps.
+            </p>
+          </div>
+
+          <div class="bg-white/60 backdrop-blur-md p-6 rounded-3xl border border-white/60 shadow-sm transition hover:bg-white/80">
+            <h4 class="text-neutral-900 font-medium text-base mb-1">Over-the-Air Updates</h4>
+            <p class="text-neutral-500 text-xs leading-relaxed">
+              Dein EcoPod entwickelt sich weiter. Erhalte kontinuierlich neue Software-Features kabellos über die App.
+            </p>
+          </div>
+        </div>
+
+      </div>
     </div>
-</section>
+  </section>
 
-<!-- Minimaler Footer -->
-<footer class="flex justify-between items-center text-xs text-neutral-400 pt-6 border-t border-neutral-300/40">
-    <p>&copy; 2026 EcoPod Inc.</p>
-    <p>Designed with precision.</p>
+</div>
+
+<!-- VOLLBILD-SPLIT-CONTAINER -->
+<div id="exploded-container" class="fixed inset-0 w-full h-screen z-50 hidden items-center justify-center p-6 md:p-12 bg-[#EBEBEB] opacity-0">
+  <div class="w-full max-w-7xl h-full flex flex-col md:flex-row items-center justify-between gap-12 relative">
+
+    <div class="w-full md:w-1/2 h-[60vh] relative flex items-center justify-center">
+      <div id="box-metal" class="absolute w-full h-full smooth-transform">
+        <model-viewer
+                id="viewer-metal"
+                src="../assets/ecopod4.glb"
+                alt="EcoPod Metall"
+                bounds="tight"
+                camera-target="auto"
+                environment-image="neutral"
+                exposure="0.95"
+                shadow-intensity="0"
+                touch-action="none"
+                camera-orbit="0deg 75deg 105%"
+                orientation="0deg 0deg 0deg">
+        </model-viewer>
+      </div>
+
+      <div id="box-glass" class="absolute w-full h-full smooth-transform">
+        <model-viewer
+                id="viewer-glass"
+                src="../assets/ecopod5.glb"
+                alt="EcoPod Glas"
+                bounds="tight"
+                camera-target="auto"
+                environment-image="neutral"
+                exposure="0.95"
+                shadow-intensity="0"
+                touch-action="none"
+                camera-orbit="0deg 75deg 105%"
+                orientation="0deg 0deg 0deg">
+        </model-viewer>
+      </div>
+    </div>
+
+    <div id="info-panel" class="w-full md:w-1/2 bg-white/90 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-2xl space-y-4 opacity-0 transform translate-y-6">
+      <span class="text-xs uppercase tracking-widest text-blue-600 font-semibold">Materialanalyse</span>
+      <h3 class="text-3xl font-medium tracking-tight text-neutral-950">Test: Innere Beschaffenheit</h3>
+      <p class="text-neutral-600 text-sm leading-relaxed">
+        Der EcoPod im zerlegten Zustand zeigt das Zusammenspiel seiner präzisionsgefertigten Komponenten. Jedes Modul wurde eigenständig für maximale Nachhaltigkeit optimiert.
+      </p>
+      <ul class="space-y-3 text-xs text-neutral-700 pt-2 border-t border-neutral-200">
+        <li><strong>Metall-Komponente (ecopod4):</strong> Gefertigt aus eloxiertem Aerospace-Aluminium. Extrem leicht, hitzebeständig und zu 100 % recycelbar.</li>
+        <li><strong>Glas-Komponente (ecopod5):</strong> Hochfestes, tinten-gefärbtes Sicherheitsglas mit spezieller Antireflex-Beschichtung und hoher Lichttransmission.</li>
+      </ul>
+      <div class="pt-4">
+        <button id="back-to-config" class="inline-flex items-center text-xs font-semibold text-neutral-900 hover:text-blue-600 transition cursor-pointer">
+          &larr; Zurück zum Konfigurator
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="p-6 md:p-12 flex justify-between items-center text-xs text-neutral-400 border-t border-neutral-300/40 relative z-40 bg-[#EBEBEB]">
+  <p>&copy; 2026 EcoPod Inc.</p>
+  <p>Designed with precision.</p>
 </footer>
 
-<!-- INTERAKTIVE JAVASCRIPT-LOGIK -->
 <script>
-    const modelViewer = document.getElementById("ecopod-viewer");
-    const colorButtons = document.querySelectorAll(".color-btn");
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
 
-    // Dynamic 3D Color Switcher
-    colorButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            colorButtons.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'ring-neutral-900'));
-            button.classList.add('ring-2', 'ring-offset-2', 'ring-neutral-900');
+  window.scrollTo(0, 0);
 
-            const hexColor = button.getAttribute('data-color');
+  window.addEventListener('load', function() {
+    window.scrollTo(0, 0);
+    setTimeout(function() {
+      window.scrollTo(0, 0);
+    }, 10);
+  });
 
-            if (modelViewer.model && modelViewer.model.materials.length > 0) {
-                const material = modelViewer.model.materials[0];
-                const rgb = hexToRgbRatio(hexColor);
-                material.pbrMetallicRoughness.setBaseColorFactor([rgb.r, rgb.g, rgb.b, 1.0]);
-            }
-        });
+  gsap.registerPlugin(ScrollTrigger);
+
+  const modelBox = document.getElementById('model-box');
+  const modelViewer = document.getElementById("ecopod-viewer");
+  const colorButtons = document.querySelectorAll(".color-btn");
+  const checkoutButton = document.getElementById("checkout-button");
+  const backButton = document.getElementById("back-to-config");
+  const modelContainer = document.getElementById("model-container");
+  const explodedContainer = document.getElementById("exploded-container");
+
+  const boxMetal = document.getElementById("box-metal");
+  const boxGlass = document.getElementById("box-glass");
+  const viewerMetal = document.getElementById("viewer-metal");
+  const viewerGlass = document.getElementById("viewer-glass");
+  const infoPanel = document.getElementById("info-panel");
+
+  let currentPodColor = '#005ca8';
+
+  // SCROLL-ANIMATION (Rotiert das Modell beim Scrollen von 0 bis 180 Grad)
+  ScrollTrigger.matchMedia({
+    "(min-width: 768px)": function() {
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero-config-wrapper",
+          start: "top top",
+          end: "bottom bottom",
+          pin: "#model-container",
+          pinSpacing: false,
+          scrub: true
+        }
+      });
+
+      tl.fromTo(modelBox,
+              { xPercent: 100, scale: 1 },
+              { xPercent: 0, scale: 1.15, ease: "none" },
+              0
+      );
+
+      // Sanfte Drehung um 180 Grad
+      tl.to(modelViewer, {
+        orientation: "0deg 180deg 0deg",
+        ease: "none"
+      }, 0);
+    },
+    "(max-width: 767px)": function() {
+      gsap.set(modelBox, { xPercent: 0, scale: 0.85 });
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#hero-config-wrapper",
+          start: "top top",
+          end: "bottom bottom",
+          pin: "#model-container",
+          pinSpacing: false,
+          scrub: true
+        }
+      });
+
+      tl.to(modelViewer, {
+        orientation: "0deg 180deg 0deg",
+        ease: "none"
+      }, 0);
+    }
+  });
+
+  // SCROLL-ANIMATION (Zentrierte Bewegung + flippende Rotations-Animation)
+  ScrollTrigger.matchMedia({
+    "(min-width: 768px)": function() {
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#scroll-wrapper",
+          start: "top top",
+          end: "+=700",
+          scrub: true
+        }
+      });
+
+      tl.to(modelBox, {
+        x: "-50%",
+        y: "120px",
+        scale: 1.2,
+        ease: "none"
+      }, 0);
+
+      // --- HIER BEFINDET SICH DIE DREHUNG BEIM SCROLLEN ---
+      tl.to(modelViewer, {
+        orientation: "15deg 180deg 25deg", // <--- Hier kannst du den Winkel anpassen
+        ease: "none"
+      }, 0);
+
+      // --- HIER KANNST DU NEUE EIGENSCHAFTEN ERWEITERN ---
+      // Beispiel: Kamera-Blickwinkel (Orbit) verändern
+      tl.to(modelViewer, {
+        cameraOrbit: "90deg 60deg 100%",
+        ease: "none"
+      }, 0);
+
+    }
+  });
+
+  function appSetColor(hexColor) {
+    currentPodColor = hexColor;
+    updatePodMaterials(hexColor);
+    colorButtons.forEach(btn => {
+      if (btn.getAttribute('data-color') === hexColor) {
+        btn.classList.add('ring-2', 'ring-offset-2', 'ring-neutral-900');
+      } else {
+        btn.classList.remove('ring-2', 'ring-offset-2', 'ring-neutral-900');
+      }
     });
+  }
 
-    // Hex zu RGB Umrechnung
-    function hexToRgbRatio(hex) {
-        let c = hex.replace('#', '');
-        if (c.length === 3) c = c.split('').map(x => x + x).join('');
-        const num = parseInt(c, 16);
-        return {
-            r: ((num >> 16) & 255) / 255,
-            g: ((num >> 8) & 255) / 255,
-            b: (num & 255) / 255
-        };
+  function updatePodMaterials(hexColor) {
+    const model = modelViewer.model;
+    if (!model || !model.materials || model.materials.length === 0) return;
+
+    let c = hexColor.replace('#', '');
+    if (c.length === 3) c = c.split('').map(x => x + x).join('');
+    const num = parseInt(c, 16);
+    const r = ((num >> 16) & 255) / 255;
+    const g = ((num >> 8) & 255) / 255;
+    const b = (num & 255) / 255;
+
+    model.materials.forEach((material, index) => {
+      const pbr = material.pbrMetallicRoughness;
+      const name = material.name.toLowerCase();
+
+      if (index === 0 || name.includes('glas') || name.includes('glass')) {
+        pbr.setBaseColorFactor([r, g, b, 0.4]);
+        pbr.setMetallicFactor(0.0);
+        pbr.setRoughnessFactor(0.05);
+        material.setAlphaMode('BLEND');
+        if (material.transmission) material.transmission.setTransmissionFactor(0.9);
+      } else {
+        pbr.setBaseColorFactor([0.9, 0.91, 0.93, 1.0]);
+        pbr.setMetallicFactor(1.0);
+        pbr.setRoughnessFactor(0.1);
+        material.setAlphaMode('OPAQUE');
+      }
+    });
+    modelViewer.requestUpdate();
+  }
+
+  function updateExplodedMaterials(hexColor) {
+    const modelM = viewerMetal.model;
+    if (modelM && modelM.materials && modelM.materials.length > 0) {
+      modelM.materials.forEach(material => {
+        const pbr = material.pbrMetallicRoughness;
+        pbr.setBaseColorFactor([0.9, 0.91, 0.93, 1.0]);
+        pbr.setMetallicFactor(1.0);
+        pbr.setRoughnessFactor(0.1);
+        material.setAlphaMode('OPAQUE');
+      });
+      viewerMetal.requestUpdate();
     }
 
-    // Stripe Checkout Weiterleitung
-    document.getElementById('checkout-button').addEventListener('click', function () {
-        const stripePaymentLink = "https://buy.stripe.com/dein_link_hier";
+    const modelG = viewerGlass.model;
+    if (modelG && modelG.materials && modelG.materials.length > 0) {
+      let c = hexColor.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      const r = ((num >> 16) & 255) / 255;
+      const g = ((num >> 8) & 255) / 255;
+      const b = (num & 255) / 255;
 
-        if (stripePaymentLink.includes("dein_link_hier")) {
-            alert("Erfolg! Der Button ist einsatzbereit. Ersetze 'https://buy.stripe.com/dein_link_hier' im Code einfach durch deinen echten Stripe-Link.");
-        } else {
-            window.location.href = stripePaymentLink;
-        }
+      modelG.materials.forEach(material => {
+        const pbr = material.pbrMetallicRoughness;
+        pbr.setBaseColorFactor([r, g, b, 0.4]);
+        pbr.setMetallicFactor(0.0);
+        pbr.setRoughnessFactor(0.05);
+        material.setAlphaMode('BLEND');
+        if (material.transmission) material.transmission.setTransmissionFactor(0.9);
+      });
+      viewerGlass.requestUpdate();
+    }
+  }
+
+  colorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      colorButtons.forEach(btn => btn.classList.remove('ring-2', 'ring-offset-2', 'ring-neutral-900'));
+      button.classList.add('ring-2', 'ring-offset-2', 'ring-neutral-900');
+      currentPodColor = button.getAttribute('data-color');
+      updatePodMaterials(currentPodColor);
     });
+  });
+
+  modelViewer.addEventListener('load', () => {
+    setTimeout(() => {
+      updatePodMaterials(currentPodColor);
+    }, 100);
+  });
+
+  checkoutButton.addEventListener('click', () => {
+    modelContainer.style.display = "none";
+    explodedContainer.classList.remove("hidden");
+    explodedContainer.classList.add("flex");
+
+    updateExplodedMaterials(currentPodColor);
+
+    gsap.to(explodedContainer, { opacity: 1, duration: 0.5 });
+
+    gsap.fromTo(boxMetal,
+            { x: 0, y: 0, scale: 0.8 },
+            { x: "-150px", y: "-70px", scale: 1.0, duration: 1.2, ease: "power3.out" }
+    );
+
+    gsap.fromTo(boxGlass,
+            { x: 0, y: 0, scale: 0.8 },
+            { x: "150px", y: "70px", scale: 1.0, duration: 1.2, ease: "power3.out" }
+    );
+
+    gsap.to(infoPanel, { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ease: "power2.out" });
+  });
+
+  backButton.addEventListener('click', () => {
+    gsap.to(infoPanel, { opacity: 0, y: 6, duration: 0.3 });
+    gsap.to(explodedContainer, { opacity: 0, duration: 0.4, onComplete: () => {
+        explodedContainer.classList.add("hidden");
+        explodedContainer.classList.remove("flex");
+        modelContainer.style.display = "flex";
+        ScrollTrigger.refresh();
+      }});
+  });
+
+
+
 </script>
 
 </body>
